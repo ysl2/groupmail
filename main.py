@@ -18,11 +18,12 @@ import pathlib
 
 
 # ===
-# === 设置发送人、发送昵称、密码
+# === 设置发送人、发送昵称、密码、邮箱服务器
 # ===
 FROM_ADDR = '1097985743@qq.com'
 FROM_ALIAS = '于松黎'
-PASSWORD = 'abcdesdihfsdhasdjalsdj'
+PASSWORD = 'abcdefghijklmnopqrst'
+SERVER = smtplib.SMTP_SSL('smtp.qq.com', 465)
 
 # ===
 # === 设置邮件列表文件(要求是xlsx格式，并且表格包含一列是'to'，且包含一列是'cc')
@@ -78,12 +79,10 @@ def send(mail_subject, txt_filename, attachment_filename, df_to, df_cc, to_addrs
     message.attach(part_attach1)  # 添加附件
 
     try:
-        # 连接qq的服务器
-        server = smtplib.SMTP_SSL('smtp.qq.com', 465)
-        server.login(FROM_ADDR, PASSWORD)
-        server.sendmail(FROM_ADDR, to_addrs, message.as_string())
+        SERVER.login(FROM_ADDR, PASSWORD)
+        SERVER.sendmail(FROM_ADDR, to_addrs, message.as_string())
         print('success')
-        server.quit()
+        SERVER.quit()
     except smtplib.SMTPException as e:
         print('error', e)
 
